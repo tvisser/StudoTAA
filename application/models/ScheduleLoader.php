@@ -111,7 +111,10 @@
                                 );
 
                                 # Check if the instances intersect in specific fields.
-                                if($value = $this->intersect_instances($instance_data, [$hour_data[count($hour_data) - 1], $hour_data[count($hour_data) - 2]])) {
+                                if($value = $this->intersect_instances($instance_data, [
+                                    isset($hour_data[count($hour_data) - 1]) ? $hour_data[count($hour_data) - 1] : [],
+                                    isset($hour_data[count($hour_data) - 2]) ? $hour_data[count($hour_data) - 2] : []
+                                ])) {
                                     $hour_data[count($hour_data) - $value['index']]['end'] = $instance_data['end'];
                                 } else {
                                     $hour_data[] = $instance_data;
