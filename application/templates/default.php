@@ -230,8 +230,8 @@
         <footer class="main-footer">
           <div class="container">
             <div class="pull-right hidden-xs">
-              <a class="btn btn-social-icon btn-dropbox" title="Verkrijg meer informatie over de applicatie."><i class="fa fa-info"></i></a>
-              <a class="btn btn-social-icon btn-github" title="Bekijk StudoTAA's broncode en documentatie op GitHub." target="_blank"><i class="fa fa-github"></i></a>
+              <a class="btn btn-social-icon btn-dropbox" title="Verkrijg meer informatie over de applicatie." data-toggle="tooltip" data-original-title="Verkrijg meer informatie over de applicatie.."><i class="fa fa-info"></i></a>
+              <a class="btn btn-social-icon btn-github" href="https://github.com/TVisser/StudoTAA.git" title="Bekijk StudoTAA's broncode en documentatie op GitHub." data-toggle="tooltip" data-original-title="Bekijk StudoTAA's broncode en documentatie op GitHub." target="_blank"><i class="fa fa-github"></i></a>
             </div>
             <strong>Copyright &copy; 2015-<?php echo date("Y"); ?> <small>ontwikkeld door</small> <a href="http://thoby.nl" target="_blank">Thoby Visser</a> - <a href="http://roc-teraa.nl/" target="_blank">ROC ter AA</a>.</strong>
           </div><!-- /.container -->

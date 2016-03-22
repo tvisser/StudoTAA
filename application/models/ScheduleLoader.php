@@ -110,7 +110,12 @@
                                     'end' => $timestamps[$hour + $hour_row['colspan']]
                                 );
 
-                                $hour_data[] = $instance_data;
+                                # Check if the instances intersect in specific fields.
+                                if($value = $this->intersect_instances($instance_data, [$hour_data[count($hour_data) - 1], $hour_data[count($hour_data) - 2]])) {
+                                    $hour_data[count($hour_data) - $value['index']]['end'] = $instance_data['end'];
+                                } else {
+                                    $hour_data[] = $instance_data;
+                                }
                             }
                         }
 
@@ -138,5 +143,26 @@
             $frequent_value = array_count_values($values);
 
             return date('H:i', strtotime($_timestamps[count($_timestamps) - 1]) + array_search(max($frequent_value), $frequent_value));
+        }
+
+        /**
+         * Intersects a master-instance to an array of other instances, and return the intersected values,
+         * including the index of the compared array.
+         *
+         * @param array             The master array with values of the current instance.
+         * @param array(array)      The values of past instances, which you want to check which compares to the $_master value.
+         * @return array|bool       Return an array of the intersecting values or return false if not enough values intersect.
+         */
+        protected function intersect_instances($_master, $_compare_array)
+        {
+            if(is_array($_compare_array)) {
+                for($index = 0; $index < count($_compare_array); $index++) {
+                    $intersection = array_intersect($_master , $_compare_array[$index]);
+                    if(count($intersection) >= 5 && isset($intersection['teacher']) && isset($intersection['subject'])) {
+                        return $intersection + array('index' => $index + 1);
+                    }
+                }
+            }
+            return false;
         }
     }
