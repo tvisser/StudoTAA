@@ -7,21 +7,15 @@
          * - Thoby
          */
 
-        $html = file_get_contents('http://roosters.roc-teraa.nl/rooster_uitwisseling/ict-college/2P0/2016022920160422/2P02527.htm');
-
-        # Import ScheduleLoader class.
         $this->model('ScheduleLoader');
-
-        $loader = new ScheduleLoader();
-
-        //echo json_encode($loader->format_data_to_database($loader->convert_schedule_data($html)));
-
-        # Import ScheduleLoader class.
         $this->model('ScheduleNavigator');
 
+        $loader = new ScheduleLoader();
         $nav = new ScheduleNavigator();
 
-        var_dump($nav->get_schedule_url('ict-college', 'IC.15AO.a'));
+        $html = file_get_contents($nav->get_schedule_urls('ict-college')['IC.14AO.a']);
+
+        echo json_encode($loader->format_data_to_database($loader->convert_schedule_data($html)));
 
     ?>
     </div>

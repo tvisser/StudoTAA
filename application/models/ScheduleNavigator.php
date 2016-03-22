@@ -24,7 +24,8 @@
         }
 
         /**
-         * Splits the classes-selection HTML into rows and fills an array in the 'class-names => url' format.
+         * Loads the HTML of the classes-overview page,
+         * splits the page into rows and fills an array in the 'class-names => url' format.
          *
          * @param   string  The url of the classes-overview page.
          * @return  array   An array filled in the 'class-names => url' format.
@@ -53,18 +54,14 @@
         /**
          * Navigate through the sector- and classes selection to get the desired URLs for the ScheduleLoader class.
          *
-         * @param   string      The name of the sector you want to search
-         * @param   ? string    An optional string to make you search a single class (if there is no class with the given name, this function will return FALSE);
-         * @return  array|bool  Return the list of anchors, a single anchor (if $_class is given) and return FALSE if given $_class name doesn't exist.
+         * @param   string      The name of the sector you want to search.
+         * @return  array       Return the list of anchors formatted like 'class-names => url'.
          */
-        public function get_schedule_url($_sector, $_class = null)
+        public function get_schedule_urls($_sector)
         {
             $overview_HTML = $this->split_anchors(file_get_contents('http://roosters.roc-teraa.nl/rooster_uitwisseling/' . $_sector));
             $anchors = $this->parse_classes('http://roosters.roc-teraa.nl/rooster_uitwisseling/' . $_sector . '/' . $overview_HTML[count($overview_HTML) - 1]);
-            if (isset($_class) === true) {
-                if(isset($anchors[$_class]))
-                    return $anchors[$_class];
-                else return false;
-            } else return $anchors;
+
+            return $anchors;
         }
     }
