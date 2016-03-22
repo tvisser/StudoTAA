@@ -14,7 +14,14 @@
 
         $loader = new ScheduleLoader();
 
-        echo json_encode($loader->format_data_to_database($loader->convert_schedule_data($html)));
+        //echo json_encode($loader->format_data_to_database($loader->convert_schedule_data($html)));
+
+        # Import ScheduleLoader class.
+        $this->model('ScheduleNavigator');
+
+        $nav = new ScheduleNavigator();
+
+        var_dump($nav->get_schedule_url('ict-college', 'IC.15AO.a'));
 
     ?>
     </div>

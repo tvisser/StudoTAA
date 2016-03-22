@@ -153,7 +153,7 @@
          * including the index of the compared array.
          *
          * @param array             The master array with values of the current instance.
-         * @param array(array)      The values of past instances, which you want to check which compares to the $_master value.
+         * @param array(array)      The values of past instances combined in an array, which you want to check relative to the $_master value.
          * @return array|bool       Return an array of the intersecting values or return false if not enough values intersect.
          */
         protected function intersect_instances($_master, $_compare_array)
