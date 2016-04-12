@@ -49,7 +49,7 @@
         public function query($_query, $_return_array = false) {
             if(!empty($_query)) {
                 if ($this->connection->connect_errno) {
-                    printf('<div class="alert alert-danger"><strong>Database error: </strong>%s</div>', $this->connection->connect_error);
+                    printf('<div class="alert alert-danger"><strong>Database error: </strong>%s.</div>', $this->connection->connect_error);
                     exit();
                 }
                 if ($result = $this->connection->query($_query, MYSQLI_USE_RESULT)) {

@@ -86,6 +86,10 @@
                     $column_name = 'Classroomname';
                     break;
 
+                case 'classes':
+                    $column_name = 'Classname';
+                    break;
+
                 default: return;
             }
 
@@ -93,29 +97,51 @@
         }
 
 
-        ### TODO: Check if hour already exists, if so use that id.
-        ### TODO: Clear table depending on class.
-        ### TODO: Insert using class-id, currently using 0.
+        /**
+         * Uses data and the class' name to save the hour-data to the database, using the right foreign keys
+         * and making sure all data is correctly formatted.
+         *
+         * @param   array   The hour data (exported from the format_data_to_database function in the ScheduleLoader class)
+         * @param   string  The name of the class, used for the query's foreign-key.
+         */
 
-        public function execute($_hour_data)
+        ### TODO: Insert using sector-id, currently using 1.
+        
+        public function execute($_hour_data, $_class_name)
         {
             $fk_teachers    = $this->load_database_data('teachers');
             $fk_subjects    = $this->load_database_data('subjects');
             $fk_classrooms  = $this->load_database_data('classrooms');
 
-            foreach($_hour_data as $current_insert) {
-                # Check if current-inserts teacher is newly added.
-                if(!isset($fk_teachers[$current_insert['teacher']])) {
-                    echo 'Adding new teacher ' . $current_insert['teacher'] . '...</br>';
+            # Query the primary key belonging to the current class.
+            $fk_class_name   = $this->db->query('SELECT `id_Class` FROM classes WHERE `Classname`="' . $_class_name . '"');
+            if(empty($fk_class_name)) {
+                $this->add_table_instance('classes', $_class_name);
+                $fk_class_name = $this->db->query('SELECT `id_Class` FROM classes WHERE `Classname`="' . $_class_name . '"');
+            }
 
-                    $this->add_table_instance('teachers', $current_insert['teacher']);
-                    $fk_teachers = $this->load_database_data('teachers');
-
-                    echo 'Added new teacher, ID: ' . $fk_teachers[$current_insert['teacher']] . '</br></br>';
+            # Fetch hours to possibly use their primary key.
+            $queried_hours = $this->db->query('SELECT * FROM hours WHERE fk_Class=' . $fk_class_name['id_Class'], true);
+            if (!empty($queried_hours)) {
+                $saved_hours = array();
+                foreach ($queried_hours as $hour) {
+                    $saved_hours
+                        [$hour['Date']]
+                        [$hour['Starttime']]
+                        [$hour['Endtime']]
+                        [(!empty($hour['fk_Subject'])) ? $hour['fk_Subject'] : 'NULL']
+                        [(!empty($hour['fk_Teacher'])) ? $hour['fk_Teacher'] : 'NULL']
+                        [(!empty($hour['fk_Classroom'])) ? $hour['fk_Classroom'] : 'NULL']
+                        = $hour['id_Hour'];
                 }
+            }
+
+            $this->db->query('DELETE FROM `hours` WHERE `fk_Class` = ' . $fk_class_name['id_Class']);
+
+            foreach($_hour_data as $current_insert) {
 
                 # Check if current-inserts subject is newly added.
-                if(!isset($fk_subjects[$current_insert['subject']])) {
+                if(isset($current_insert['subject']) && !isset($fk_subjects[$current_insert['subject']])) {
                     echo 'Adding new subject ' . $current_insert['subject'] . '...</br>';
 
                     $this->add_table_instance('subjects', $current_insert['subject']);
@@ -124,8 +150,18 @@
                     echo 'Added new subject, ID: ' . $fk_subjects[$current_insert['subject']] . '</br></br>';
                 }
 
+                # Check if current-inserts teacher is newly added.
+                if(isset($current_insert['teacher']) && !isset($fk_teachers[$current_insert['teacher']])) {
+                    echo 'Adding new teacher ' . $current_insert['teacher'] . '...</br>';
+
+                    $this->add_table_instance('teachers', $current_insert['teacher']);
+                    $fk_teachers = $this->load_database_data('teachers');
+
+                    echo 'Added new teacher, ID: ' . $fk_teachers[$current_insert['teacher']] . '</br></br>';
+                }
+
                 # Check if current-inserts classroom is newly added.
-                if(!isset($fk_classrooms[$current_insert['classroom']])) {
+                if(isset($current_insert['classroom']) && !isset($fk_classrooms[$current_insert['classroom']])) {
                     echo 'Adding new classroom ' . $current_insert['classroom'] . '...</br>';
 
                     $this->add_table_instance('classrooms', $current_insert['classroom']);
@@ -134,8 +170,18 @@
                     echo 'Added new classroom, ID: ' . $fk_classrooms[$current_insert['classroom']] . '</br></br>';
                 }
 
+                $date = date('Y-m-d', strtotime($current_insert['date']));
+
+                $key_classroom  = (!empty($current_insert['classroom'])) ? $fk_classrooms[$current_insert['classroom']] : 'NULL';
+                $key_teacher    = (!empty($current_insert['teacher'])) ? $fk_teachers[$current_insert['teacher']] : 'NULL';
+                $key_subject    = (!empty($current_insert['subject'])) ? $fk_subjects[$current_insert['subject']] : 'NULL';
+
+                $primary_key = 'NULL';
+                if(isset($saved_hours[$date][$current_insert['start'] . ':00'][$current_insert['end'] . ':00'][$key_subject][$key_teacher][$key_classroom]))
+                    $primary_key = $saved_hours[$date][$current_insert['start'] . ':00'][$current_insert['end'] . ':00'][$key_subject][$key_teacher][$key_classroom];
+
                 $this->db->query('INSERT INTO `hours` (`id_Hour`, `Date`, `Starttime`, `Endtime`, `fk_Class`, `fk_Teacher`, `fk_Subject`, `fk_Classroom`, `fk_Sector`)
-                                  VALUES (NULL, "' . date('Y-m-d', strtotime($current_insert['date'])) . '", "' . $current_insert['start'] . '", "' . $current_insert['end'] . '", ' . 0 . ', ' . $fk_teachers[$current_insert['teacher']] . ', ' . $fk_subjects[$current_insert['subject']] . ', ' . $fk_classrooms[$current_insert['classroom']] . ', \'5\');');
+                                  VALUES (' . $primary_key . ', "' . $date . '", "' . $current_insert['start'] . '", "' . $current_insert['end'] . '", ' . $fk_class_name['id_Class'] . ', ' . $key_teacher . ', ' . $key_subject . ', ' . $key_classroom . ', \'1\');');
             }
         }
     }

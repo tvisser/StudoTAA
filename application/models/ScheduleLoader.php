@@ -101,7 +101,7 @@
                                         'subject' => $instance[2]
                                     ];
                                 } else if(count($instance) === 1) {
-                                    $instance_data = [ 'vak' => $instance[0] ];
+                                    $instance_data = [ 'subject' => $instance[0] ];
                                 }
 
                                 $instance_data = $instance_data + [

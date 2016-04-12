@@ -7,6 +7,8 @@
          * - Thoby
          */
 
+        $start = microtime(true);
+
         $this->model('ScheduleLoader');
         $this->model('ScheduleNavigator');
         $this->model('ScheduleSaver');
@@ -18,14 +20,18 @@
             $saver = new ScheduleSaver($this->db);
         } catch (Exception $e) { echo $e->getMessage(); }
 
-        $html = file_get_contents($nav->get_schedule_urls('ict-college')['IC.14AO.a']);
+        # Loop through all classes in a sector.
+        foreach($nav->get_schedule_urls('ict-college') as $klas => $klas_url) {
+            $html = file_get_contents($klas_url);
+            $saver->execute($loader->format_data_to_database($loader->convert_schedule_data($html)), $klas);
+        }
 
-        $saver->execute($loader->format_data_to_database($loader->convert_schedule_data($html)));
+        # Testing the efficiency of the function:
 
-        //var_dump($saver->load_database_data('teachers'));
+        echo microtime(true) - $start;
 
-
-
+        # Currently seems about up to 50% faster, using the key-indexing instead of querying the database.
+        # Average 13.74s VS 21.02s over about 50 tests.
     ?>
     </div>
 </div>
