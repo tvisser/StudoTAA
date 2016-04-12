@@ -1,7 +1,7 @@
 <?php
+
 	class Database
 	{
-
 		protected $connection;
 
         /**
@@ -43,7 +43,7 @@
         * Executes query to the database, returns result.
         *
         * @param    string      The query you wish to execute
-        * @param    string      The return value, automaticly set to false
+        * @param    bool        The return value, automaticly set to false
         * @return   array       Query result, if any.
         */
         public function query($_query, $_return_array = false) {

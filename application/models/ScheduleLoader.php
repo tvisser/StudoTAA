@@ -104,11 +104,11 @@
                                     $instance_data = [ 'vak' => $instance[0] ];
                                 }
 
-                                $instance_data = $instance_data + array(
+                                $instance_data = $instance_data + [
                                     'date' => $date_today,
                                     'start' => $timestamps[$hour],
                                     'end' => $timestamps[$hour + $hour_row['colspan']]
-                                );
+                                ];
 
                                 # Check if the instances intersect in specific fields.
                                 if($value = $this->intersect_instances($instance_data, [

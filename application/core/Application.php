@@ -11,7 +11,8 @@
 		protected $params = [];
 
 		/**
-		 * Application constructor. Selects which file & function to call.
+		 * Application constructor. Selects which file & function to call-
+		 * basically handles the MVCs URL routing mechanism.
          */
 		public function __construct()
 		{

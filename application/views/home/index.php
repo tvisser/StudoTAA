@@ -9,13 +9,22 @@
 
         $this->model('ScheduleLoader');
         $this->model('ScheduleNavigator');
+        $this->model('ScheduleSaver');
 
         $loader = new ScheduleLoader();
         $nav = new ScheduleNavigator();
 
+        try {
+            $saver = new ScheduleSaver($this->db);
+        } catch (Exception $e) { echo $e->getMessage(); }
+
         $html = file_get_contents($nav->get_schedule_urls('ict-college')['IC.14AO.a']);
 
-        echo json_encode($loader->format_data_to_database($loader->convert_schedule_data($html)));
+        $saver->execute($loader->format_data_to_database($loader->convert_schedule_data($html)));
+
+        //var_dump($saver->load_database_data('teachers'));
+
+
 
     ?>
     </div>
