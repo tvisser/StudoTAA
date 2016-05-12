@@ -8,7 +8,6 @@
          */
 
         /*
-
         $start = microtime(true);
 
         $this->model('ScheduleLoader');

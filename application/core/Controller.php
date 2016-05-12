@@ -39,13 +39,14 @@
 		}
 
 
-        /**
-         * Loads the specified view from the 'application/views/*' directory.
-         * The function adds the .php, and loads the view into the template by default.
-         *
-         * @param   string  Location of the view (without .php).
-         */
-        public function view($_view)
+		/**
+		 * Loads the specified view from the 'application/views/*' directory.
+		 * The function adds the .php, and loads the view into the template by default.
+		 *
+		 * @param   string  Location of the view (without .php).
+		 * @param 	array 	Data to be used on the view.
+		 */
+        public function view($_view, $_data = [])
 		{
             # When no footer is declared, check if a file corresponding to *.footer.php exists.
             if(empty($this->footer) && file_exists('application/views/' . $_view . '.footer.php'))

@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-xs-12" style="padding: 0px;">
         <p class="swipe-header visible-xs col-xs-8 col-xs-offset-2">
@@ -11,19 +10,6 @@
 
             </div>
             <div class="box-body">
-                <!--<div class="row">
-                    <div class="col-xs-12">
-                        <div class="input-group pull-right">
-                            <div class="input-group-btn initial-width">
-                                <button type="button" class="btn btn-primary"><i class="fa fa-chevron-left"></i></button>
-                            </div>
-                            <span class="input-group-addon initial-width">Vandaag</span>
-                            <div class="input-group-btn initial-width">
-                                <button type="button" class="btn btn-primary"><i class="fa fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
 
                 <style>
                     ul.clearfix {
@@ -56,6 +42,10 @@
                         ul.clearfix {
                             transform: translateZ(0px) translateX(0px) !important;
                             width: initial !important;
+                        }
+
+                        .frame.oneperframe {
+                            overflow: visible !important;
                         }
                     }
 
@@ -105,14 +95,18 @@
                         position: absolute;
 
                         cursor: pointer;
+
+                        overflow: hidden;
                     }
 
                     .sh h3 {
+                        margin-top: 0.2em;
                         margin-bottom: -5px;
                         font-weight: 700;
                     }
 
                     .sh h4 {
+                        margin-top: 0.2em;
                         margin-bottom: 1em;
                     }
 
@@ -191,56 +185,51 @@
                     }
                 </style>
 
-                <div class="frame oneperframe" id="oneperframe" style="overflow: hidden;">
-                    <ul class="clearfix" style="">
-                        <li class="">
-                            <div class="sh-header">
-                                <span>Maandag</span>
-                                <small>(9-5-'16)</small>
-                            </div>
-                            <div class="sh-container">
-                                <div class="sh sh-default" style="height: 30%; top: 0%;">
-                                    <h3>Vaknaam</h3>
-                                    <h4>08:30 <small>t/m</small> 10:40</h4>
-                                    <h4>SEAR - K1.60</h4>
-                                </div>
-                                <div class="sh sh-default" style="height: 30%; top: 30%;">
-                                    <h3>Vaknaam</h3>
-                                    <h4>08:30 <small>t/m</small> 10:40</h4>
-                                    <h4>SEAR - K1.60</h4>
-                                </div>
-                                <div class="sh sh-default" style="height: 30%; top: 70%;">
-                                    <h3>Vaknaam</h3>
-                                    <h4>08:30 <small>t/m</small> 10:40</h4>
-                                    <h4>SEAR - K1.60</h4>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="">
-                            <div class="sh-header">
-                                <span>Dinsdag</span>
-                                <small>10-5-'16</small>
-                            </div>
+                <div class="frame" id="rooster-block" style="overflow: hidden;">
+                    <ul class="clearfix">
+                        <?php
 
-                        </li>
-                        <li class="">
-                            <div class="sh-header">
-                                <span>Woensdag</span>
-                                <small>11-5-'16</small>
-                            </div>
-                        </li>
-                        <li class="">
-                            <div class="sh-header">
-                                <span>Donderdag</span>
-                                <small>12-5-'16</small>
-                            </div>
-                        </li>
-                        <li class="">
-                            <div class="sh-header">
-                                <span>Vrijdag</span>
-                                <small>13-5-'16</small>
-                            </div>
-                        </li>
+                        $this->model('ScheduleDrawer');
+                        $weekdays = [ 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag' ];
+
+                        foreach ($_data['day_data'] as $date => $data) {
+                            ?>
+
+                            <li>
+                                <div class="sh-header">
+                                    <span><?php echo $weekdays[date("w", strtotime($date)) - 1]; ?></span>
+                                    <small>(<?php echo date("j-n-'y", strtotime($date)); ?>)</small>
+                                </div>
+                                <div class="sh-container">
+
+                                    <?php
+                                    if(!empty($data)) {
+                                        foreach ($data as $hour) {
+                                            $time_start = substr($hour['Starttime'], 0, 5);
+                                            $time_end = substr($hour['Endtime'], 0, 5);
+
+                                            $block_height = ScheduleDrawer::get_block_height($time_start, $time_end);
+                                            $block_top = ScheduleDrawer::get_top_offset($time_start);
+                                            ?>
+
+                                            <div class="sh sh-default" title="<?php echo $hour['id_Hour']; ?>"
+                                                 style="<?php echo "height: $block_height; top: $block_top"; ?>">
+                                                <h3><?php echo $hour['Subjecttext']; ?></h3>
+                                                <h4><?php echo $time_start; ?>
+                                                    <small>t/m</small> <?php echo $time_end; ?></h4>
+                                                <h4><?php echo $hour['Initials'] . " - " . $hour['Classroomname']; ?></h4>
+                                            </div>
+
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </li>
+
+                            <?php
+                        }
+                        ?>
                     </ul>
                 </div>
             </div>

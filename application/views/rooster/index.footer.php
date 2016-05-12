@@ -8,7 +8,7 @@
     function init_sly() {
         timeout = false;
 
-        var $frame = jQuery('#oneperframe');
+        var $frame = jQuery('#rooster-block');
         var $clearfix = jQuery('ul.clearfix li');
 
         $clearfix.css( "width", $frame.width() );
