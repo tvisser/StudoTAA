@@ -1,38 +1,35 @@
-/*! AdminLTE app.js
+/*! StudoTAA app.js
  * ================
- * Main JS application file for AdminLTE v2. This file
+ * Main JS application file for StudoTAA. This file
  * should be included in all pages. It controls some layout
- * options and implements exclusive AdminLTE plugins.
+ * options and implements exclusive StudoTAA plugins.
  *
- * @Author  Almsaeed Studio
- * @Support <http://www.almsaeedstudio.com>
- * @Email   <support@almsaeedstudio.com>
- * @version 2.3.0
- * @license MIT <http://opensource.org/licenses/MIT>
+ * @Author  Thoby Visser
+ * @Github  <https://github.com/tvisser/StudoTAA>
  */
 
 //Make sure jQuery has been loaded before app.js
 if (typeof jQuery === "undefined") {
-  throw new Error("AdminLTE requires jQuery");
+  throw new Error("StudoTAA requires jQuery");
 }
 
-/* AdminLTE
+/* StudoTAA
  *
  * @type Object
- * @description $.AdminLTE is the main object for the template's app.
+ * @description $.StudoTAA is the main object for the template's app.
  *              It's used for implementing functions and options related
  *              to the template. Keeping everything wrapped in an object
  *              prevents conflict with other plugins and is a better
  *              way to organize our code.
  */
-$.AdminLTE = {};
+$.StudoTAA = {};
 
 /* --------------------
- * - AdminLTE Options -
+ * - StudoTAA Options -
  * --------------------
  * Modify these options to suit your implementation
  */
-$.AdminLTE.options = {
+$.StudoTAA.options = {
   //Add slimscroll to navbar menus
   //This requires you to load the slimscroll plugin
   //in every page before app.js
@@ -61,7 +58,7 @@ $.AdminLTE.options = {
   //Enable Fast Click. Fastclick.js creates a more
   //native touch experience with touch devices. If you
   //choose to enable the plugin, make sure you load the script
-  //before AdminLTE's app.js
+  //before StudoTAA's app.js
   enableFastclick: true,
   //Control Sidebar Options
   enableControlSidebar: true,
@@ -133,7 +130,7 @@ $.AdminLTE.options = {
 /* ------------------
  * - Implementation -
  * ------------------
- * The next block of code implements AdminLTE's
+ * The next block of code implements StudoTAA's
  * functions and plugins as specified by the
  * options above.
  */
@@ -144,27 +141,27 @@ $(function () {
   $("body").removeClass("hold-transition");
 
   //Extend options if external options exist
-  if (typeof AdminLTEOptions !== "undefined") {
+  if (typeof StudoTAAOptions !== "undefined") {
     $.extend(true,
-            $.AdminLTE.options,
-            AdminLTEOptions);
+            $.StudoTAA.options,
+            StudoTAAOptions);
   }
 
   //Easy access to options
-  var o = $.AdminLTE.options;
+  var o = $.StudoTAA.options;
 
   //Set up the object
   _init();
 
   //Activate the layout maker
-  $.AdminLTE.layout.activate();
+  $.StudoTAA.layout.activate();
 
   //Enable sidebar tree view controls
-  $.AdminLTE.tree('.sidebar');
+  $.StudoTAA.tree('.sidebar');
 
   //Enable control sidebar
   if (o.enableControlSidebar) {
-    $.AdminLTE.controlSidebar.activate();
+    $.StudoTAA.controlSidebar.activate();
   }
 
   //Add slimscroll to navbar dropdown
@@ -178,7 +175,7 @@ $(function () {
 
   //Activate sidebar push menu
   if (o.sidebarPushMenu) {
-    $.AdminLTE.pushMenu.activate(o.sidebarToggleSelector);
+    $.StudoTAA.pushMenu.activate(o.sidebarToggleSelector);
   }
 
   //Activate Bootstrap tooltip
@@ -190,7 +187,7 @@ $(function () {
 
   //Activate box widget
   if (o.enableBoxWidget) {
-    $.AdminLTE.boxWidget.activate();
+    $.StudoTAA.boxWidget.activate();
   }
 
   //Activate fast click
@@ -222,9 +219,9 @@ $(function () {
 });
 
 /* ----------------------------------
- * - Initialize the AdminLTE Object -
+ * - Initialize the StudoTAA Object -
  * ----------------------------------
- * All AdminLTE functions are implemented below.
+ * All StudoTAA functions are implemented below.
  */
 function _init() {
   'use strict';
@@ -233,11 +230,11 @@ function _init() {
    * Fixes the layout height in case min-height fails.
    *
    * @type Object
-   * @usage $.AdminLTE.layout.activate()
-   *        $.AdminLTE.layout.fix()
-   *        $.AdminLTE.layout.fixSidebar()
+   * @usage $.StudoTAA.layout.activate()
+   *        $.StudoTAA.layout.fix()
+   *        $.StudoTAA.layout.fixSidebar()
    */
-  $.AdminLTE.layout = {
+  $.StudoTAA.layout = {
     activate: function () {
       var _this = this;
       _this.fix();
@@ -267,7 +264,7 @@ function _init() {
         }
 
         //Fix for the control sidebar height
-        var controlSidebar = $($.AdminLTE.options.controlSidebarOptions.selector);
+        var controlSidebar = $($.StudoTAA.options.controlSidebarOptions.selector);
         if (typeof controlSidebar !== "undefined") {
           if (controlSidebar.height() > postSetWidth)
             $(".content-wrapper, .right-side").css('min-height', controlSidebar.height());
@@ -286,7 +283,7 @@ function _init() {
         window.console.error("Error: the fixed layout requires the slimscroll plugin!");
       }
       //Enable slimscroll for fixed layout
-      if ($.AdminLTE.options.sidebarSlimScroll) {
+      if ($.StudoTAA.options.sidebarSlimScroll) {
         if (typeof $.fn.slimScroll != 'undefined') {
           //Destroy if it exists
           $(".sidebar").slimScroll({destroy: true}).height("auto");
@@ -306,12 +303,12 @@ function _init() {
    * Adds the push menu functionality to the sidebar.
    *
    * @type Function
-   * @usage: $.AdminLTE.pushMenu("[data-toggle='offcanvas']")
+   * @usage: $.StudoTAA.pushMenu("[data-toggle='offcanvas']")
    */
-  $.AdminLTE.pushMenu = {
+  $.StudoTAA.pushMenu = {
     activate: function (toggleBtn) {
       //Get the screen sizes
-      var screenSizes = $.AdminLTE.options.screenSizes;
+      var screenSizes = $.StudoTAA.options.screenSizes;
 
       //Enable sidebar toggle
       $(toggleBtn).on('click', function (e) {
@@ -343,7 +340,7 @@ function _init() {
       });
 
       //Enable expand on hover for sidebar mini
-      if ($.AdminLTE.options.sidebarExpandOnHover
+      if ($.StudoTAA.options.sidebarExpandOnHover
               || ($('body').hasClass('fixed')
                       && $('body').hasClass('sidebar-mini'))) {
         this.expandOnHover();
@@ -351,7 +348,7 @@ function _init() {
     },
     expandOnHover: function () {
       var _this = this;
-      var screenWidth = $.AdminLTE.options.screenSizes.sm - 1;
+      var screenWidth = $.StudoTAA.options.screenSizes.sm - 1;
       //Expand sidebar on hover
       $('.main-sidebar').hover(function () {
         if ($('body').hasClass('sidebar-mini')
@@ -383,11 +380,11 @@ function _init() {
    * tree view menu.
    *
    * @type Function
-   * @Usage: $.AdminLTE.tree('.sidebar')
+   * @Usage: $.StudoTAA.tree('.sidebar')
    */
-  $.AdminLTE.tree = function (menu) {
+  $.StudoTAA.tree = function (menu) {
     var _this = this;
-    var animationSpeed = $.AdminLTE.options.animationSpeed;
+    var animationSpeed = $.StudoTAA.options.animationSpeed;
     $(document).on('click', menu + ' li a', function (e) {
       //Get the clicked link and the next element
       var $this = $(this);
@@ -436,15 +433,15 @@ function _init() {
    * Adds functionality to the right sidebar
    *
    * @type Object
-   * @usage $.AdminLTE.controlSidebar.activate(options)
+   * @usage $.StudoTAA.controlSidebar.activate(options)
    */
-  $.AdminLTE.controlSidebar = {
+  $.StudoTAA.controlSidebar = {
     //instantiate the object
     activate: function () {
       //Get the object
       var _this = this;
       //Update options
-      var o = $.AdminLTE.options.controlSidebarOptions;
+      var o = $.StudoTAA.options.controlSidebarOptions;
       //Get the sidebar
       var sidebar = $(o.selector);
       //The toggle button
@@ -530,13 +527,13 @@ function _init() {
    * removing boxes from the screen.
    *
    * @type Object
-   * @usage $.AdminLTE.boxWidget.activate()
-   *        Set all your options in the main $.AdminLTE.options object
+   * @usage $.StudoTAA.boxWidget.activate()
+   *        Set all your options in the main $.StudoTAA.options object
    */
-  $.AdminLTE.boxWidget = {
-    selectors: $.AdminLTE.options.boxWidgetOptions.boxWidgetSelectors,
-    icons: $.AdminLTE.options.boxWidgetOptions.boxWidgetIcons,
-    animationSpeed: $.AdminLTE.options.animationSpeed,
+  $.StudoTAA.boxWidget = {
+    selectors: $.StudoTAA.options.boxWidgetOptions.boxWidgetSelectors,
+    icons: $.StudoTAA.options.boxWidgetOptions.boxWidgetIcons,
+    animationSpeed: $.StudoTAA.options.animationSpeed,
     activate: function (_box) {
       var _this = this;
       if (!_box) {
@@ -686,7 +683,7 @@ function _init() {
   'use strict';
 
   $.fn.activateBox = function () {
-    $.AdminLTE.boxWidget.activate(this);
+    $.StudoTAA.boxWidget.activate(this);
   };
 
 })(jQuery);

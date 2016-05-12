@@ -7,6 +7,8 @@
          * - Thoby
          */
 
+        /*
+
         $start = microtime(true);
 
         $this->model('ScheduleLoader');
@@ -20,6 +22,8 @@
             $saver = new ScheduleSaver($this->db);
         } catch (Exception $e) { echo $e->getMessage(); }
 
+        ini_set('max_execution_time', 120);
+
         # Loop through all classes in a sector.
         foreach($nav->get_schedule_urls('ict-college') as $klas => $klas_url) {
             $html = file_get_contents($klas_url);
@@ -32,6 +36,10 @@
 
         # Currently seems about up to 50% faster, using the key-indexing instead of querying the database.
         # Average 13.74s VS 21.02s over about 50 tests.
+
+        */
     ?>
+
+        <a id="button" class="btn btn-primary">Click me</a>
     </div>
 </div>

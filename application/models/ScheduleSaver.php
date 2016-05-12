@@ -103,15 +103,16 @@
          *
          * @param   array   The hour data (exported from the format_data_to_database function in the ScheduleLoader class)
          * @param   string  The name of the class, used for the query's foreign-key.
+         * @return  int     The newly updated instances count (0 if no changes are detected).
          */
-
-        ### TODO: Insert using sector-id, currently using 1.
         
         public function execute($_hour_data, $_class_name)
         {
             $fk_teachers    = $this->load_database_data('teachers');
             $fk_subjects    = $this->load_database_data('subjects');
             $fk_classrooms  = $this->load_database_data('classrooms');
+
+            $new_instance_count = 0;
 
             # Query the primary key belonging to the current class.
             $fk_class_name   = $this->db->query('SELECT `id_Class` FROM classes WHERE `Classname`="' . $_class_name . '"');
@@ -179,9 +180,11 @@
                 $primary_key = 'NULL';
                 if(isset($saved_hours[$date][$current_insert['start'] . ':00'][$current_insert['end'] . ':00'][$key_subject][$key_teacher][$key_classroom]))
                     $primary_key = $saved_hours[$date][$current_insert['start'] . ':00'][$current_insert['end'] . ':00'][$key_subject][$key_teacher][$key_classroom];
+                else $new_instance_count++;
 
-                $this->db->query('INSERT INTO `hours` (`id_Hour`, `Date`, `Starttime`, `Endtime`, `fk_Class`, `fk_Teacher`, `fk_Subject`, `fk_Classroom`, `fk_Sector`)
-                                  VALUES (' . $primary_key . ', "' . $date . '", "' . $current_insert['start'] . '", "' . $current_insert['end'] . '", ' . $fk_class_name['id_Class'] . ', ' . $key_teacher . ', ' . $key_subject . ', ' . $key_classroom . ', \'1\');');
+                $this->db->query('INSERT INTO `hours` (`id_Hour`, `Date`, `Starttime`, `Endtime`, `fk_Class`, `fk_Teacher`, `fk_Subject`, `fk_Classroom`)
+                                  VALUES (' . $primary_key . ', "' . $date . '", "' . $current_insert['start'] . '", "' . $current_insert['end'] . '", ' . $fk_class_name['id_Class'] . ', ' . $key_teacher . ', ' . $key_subject . ', ' . $key_classroom . ');');
             }
+            return $new_instance_count;
         }
     }
